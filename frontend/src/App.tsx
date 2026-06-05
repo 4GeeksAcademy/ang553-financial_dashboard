@@ -74,19 +74,30 @@ function App() {
         <div className="flex flex-col gap-8">
           <DashboardHeader period="2024 - Full Year" />
 
+          {loading ? (
+            <p className="sr-only" role="status" aria-live="polite">
+              Cargando datos financieros del dashboard.
+            </p>
+          ) : null}
+
           {error ? (
-            <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive-foreground">
+            <div
+              className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive-foreground"
+              role="alert"
+              aria-live="assertive"
+            >
               {error}
             </div>
           ) : null}
 
-          <section aria-label="Key performance indicators">
+          <section aria-label="Key performance indicators" aria-busy={loading}>
             <KPIRow metrics={metrics} loading={loading} />
           </section>
 
           <section
             aria-label="Financial charts"
             className="grid grid-cols-1 gap-4 xl:grid-cols-2"
+            aria-busy={loading}
           >
             <Suspense fallback={<ChartCardSkeleton />}>
               <IncomeOutcomeChart data={monthlyData} loading={loading} />
